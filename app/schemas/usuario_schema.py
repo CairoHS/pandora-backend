@@ -26,6 +26,9 @@ class InputLogin(BaseModel):
     login: str
     senha: str
 
+class InputRefresh(BaseModel):
+    token: str
+
 @dataclass
 class UsuarioComCredencial():
     nome: str

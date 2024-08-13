@@ -7,6 +7,7 @@ from .criptografia_senha_service import CriptografiaSenhaService
 from .token_service import TokenService
 
 from fastapi import HTTPException
+from fastapi.responses import JSONResponse
 
 class AuthService():
     @staticmethod
@@ -66,8 +67,8 @@ class AuthService():
         token_acesso = TokenService.criar_acess_token(usuario_banco.id)
         token_refresh = TokenService.criar_refresh_token(usuario_banco.id)
 
-        return {"acess_token": token_acesso,
-                "refresh_token": token_refresh}
+        return JSONResponse({"acess_token": token_acesso,
+                "refresh_token": token_refresh}, status_code=200)
 
     @staticmethod
     def login(dados_login: InputLogin) -> str:
@@ -90,6 +91,6 @@ class AuthService():
         token_acesso = TokenService.criar_acess_token(usuario_encontrado.id)
         token_refresh = TokenService.criar_refresh_token(usuario_encontrado.id)
 
-        return {"acess_token": token_acesso,
-                "refresh_token": token_refresh}
+        return JSONResponse({"acess_token": token_acesso,
+                "refresh_token": token_refresh}, status_code=200)
         
