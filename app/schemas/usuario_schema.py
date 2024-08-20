@@ -4,15 +4,13 @@ from dataclasses import dataclass, field
 from .credencial_schema import Credencial
 
 
-
-
-
 @dataclass
 class Usuario():
     login: str
     senha: str
     email: str = field(default=None)
-    id : int = field(default=None)
+    id: int = field(default=None)
+
 
 class InputCadastro(BaseModel):
     nome: str
@@ -22,12 +20,15 @@ class InputCadastro(BaseModel):
     senha: str
     comfirma_senha: str
 
+
 class InputLogin(BaseModel):
     login: str
     senha: str
 
+
 class InputRefresh(BaseModel):
     token: str
+
 
 @dataclass
 class UsuarioComCredencial():
@@ -38,9 +39,13 @@ class UsuarioComCredencial():
     senha: str
 
     def pega_usuario(self) -> Usuario:
-        return Usuario(login = self.login,
-                       senha = self.senha,
-                       email = self.email)
-    
+        return Usuario(login=self.login,
+                       senha=self.senha,
+                       email=self.email)
+
     def pega_credencial(self) -> Credencial:
         return Credencial(self.nome, self.sobrenome)
+
+
+class InputValidacao(BaseModel):
+    email: str

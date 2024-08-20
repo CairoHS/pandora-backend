@@ -23,10 +23,11 @@ app.add_middleware(
 
 
 @app.exception_handler(Exception)
-async def global_exception_handler(request : Request, exc: Exception):
+async def global_exception_handler(request: Request, exc: Exception):
     sys.stderr = open('app.log', 'a')
-    logging.exception(f"\n{'='*64}\n{'='*64}\n{'Erro'.center(64)}\n{'='*64}\n{'='*64}")
-    #logging.exception(f"Unhandled exception: {exc}")
+    logging.exception(
+        f"\n{'='*64}\n{'='*64}\n{'Erro'.center(64)}\n{'='*64}\n{'='*64}")
+    # logging.exception(f"Unhandled exception: {exc}")
     sys.stderr.close()
     return JSONResponse(
         status_code=500,
@@ -34,24 +35,23 @@ async def global_exception_handler(request : Request, exc: Exception):
     )
 
 
-#middleware para autentificação
+# middleware para autentificação
 @app.middleware("http")
 async def autentifica(request: Request, call_next):
     if not request.url.path.startswith("/auth"):
         token = request.headers.get("Authentication")
-        
+
         if token is None:
             return JSONResponse({"error": "token não encontrado"}, status_code=401)
-        
+
         dados_token = TokenService.pega_dados_token(token)
         if not dados_token or dados_token['type'] != 'acess':
-                return JSONResponse({"error": "token inválido"}, status_code=401)
-        
+            return JSONResponse({"error": "token inválido"}, status_code=401)
+
     return await call_next(request)
 
 app.include_router(auth_routes.router, prefix="/auth")
 app.include_router(user_routes.router, prefix="/user")
 
-if __name__ == '__main__':
-    cria_banco()
 
+cria_banco()
